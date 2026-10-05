@@ -1,0 +1,3 @@
+status: 200
+location: null
+body: {"firstName":"Linda","lastName":"Douglas","specialties":[{"id":3,"name":"dentistry"},{"id":2,"name":"surgery"}],"id":3}

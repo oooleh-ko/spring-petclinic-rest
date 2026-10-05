@@ -1,0 +1,3 @@
+status: 201
+location: /api/pettypes/<id>
+body: {"name":"parrot","id":<id>}

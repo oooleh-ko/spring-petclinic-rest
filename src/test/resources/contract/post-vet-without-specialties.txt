@@ -1,0 +1,3 @@
+status: 400
+location: null
+body: {"detail":"The request contains invalid or missing parameters","instance":"/api/vets","status":400,"title":"MethodArgumentNotValidException","type":"http://localhost/api/vets","timestamp":"<timestamp>","schemaValidationErrors":[{"message":"Field 'specialties' must not be null (rejected value: null)","field":"specialties","defaultMessage":"must not be null","rejectedValue":"null"}]}

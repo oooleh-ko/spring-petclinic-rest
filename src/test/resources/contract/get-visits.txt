@@ -1,0 +1,3 @@
+status: 200
+location: null
+body: [{"description":"rabies shot","id":1,"petId":7,"date":"2013-01-01"},{"description":"rabies shot","id":2,"petId":8,"date":"2013-01-02"},{"description":"neutered","id":3,"petId":8,"date":"2013-01-03"},{"description":"spayed","id":4,"petId":7,"date":"2013-01-04"}]

@@ -1,0 +1,3 @@
+status: 201
+location: /api/vets/<id>
+body: {"firstName":"Anna","lastName":"Koval","specialties":[{"id":1,"name":"radiology"}],"id":<id>}
