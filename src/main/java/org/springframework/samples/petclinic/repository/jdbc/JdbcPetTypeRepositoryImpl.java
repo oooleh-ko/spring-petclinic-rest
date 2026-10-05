@@ -19,7 +19,6 @@ package org.springframework.samples.petclinic.repository.jdbc;
 import java.sql.PreparedStatement;
 import java.util.Collection;
 
-import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -34,7 +33,6 @@ import org.springframework.stereotype.Repository;
  *
  */
 
-@DependsOnDatabaseInitialization
 @Repository
 public class JdbcPetTypeRepositoryImpl implements PetTypeRepository {
 

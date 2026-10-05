@@ -19,7 +19,6 @@ import java.sql.PreparedStatement;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -42,7 +41,6 @@ import org.springframework.stereotype.Repository;
  * @author Michael Isvy
  * @author Vitaliy Fedoriv
  */
-@DependsOnDatabaseInitialization
 @Repository
 public class JdbcVetRepositoryImpl implements VetRepository {
 

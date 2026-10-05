@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +45,6 @@ import org.springframework.stereotype.Repository;
  * @author Mark Fisher
  * @author Vitaliy Fedoriv
  */
-@DependsOnDatabaseInitialization
 @Repository
 public class JdbcPetRepositoryImpl implements PetRepository {
 

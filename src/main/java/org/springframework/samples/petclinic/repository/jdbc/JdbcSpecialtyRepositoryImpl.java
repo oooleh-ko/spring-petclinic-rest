@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -37,7 +36,6 @@ import org.springframework.stereotype.Repository;
  *
  */
 
-@DependsOnDatabaseInitialization
 @Repository
 public class JdbcSpecialtyRepositoryImpl implements SpecialtyRepository {
 

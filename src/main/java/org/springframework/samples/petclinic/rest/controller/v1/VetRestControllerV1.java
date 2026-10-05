@@ -15,6 +15,15 @@
  */
 package org.springframework.samples.petclinic.rest.controller.v1;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,18 +34,9 @@ import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.rest.dto.VetDto;
 import org.springframework.samples.petclinic.service.ClinicService;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * @author Vitaliy Fedoriv
@@ -123,7 +123,6 @@ public class VetRestControllerV1 {
     @DeleteMapping(value = "/vets/{vetId}", produces = "application/json")
     @Operation(summary = "Delete a vet by ID")
     @PreAuthorize("hasRole(@roles.VET_ADMIN)")
-    @Transactional
     public ResponseEntity<VetDto> deleteVet(@PathVariable("vetId") @Min(0) Integer vetId) {
         Vet vet = this.clinicService.findVetById(vetId);
         if (vet == null) {
