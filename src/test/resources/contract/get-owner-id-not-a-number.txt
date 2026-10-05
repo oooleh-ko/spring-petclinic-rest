@@ -1,0 +1,3 @@
+status: 400
+location: null
+body: {"detail":"The request contains invalid or missing parameters","instance":"/api/owners/abc","status":400,"title":"MethodArgumentTypeMismatchException","type":"http://localhost/api/owners/abc","timestamp":"<timestamp>","schemaValidationErrors":[{"message":"Field 'ownerId' must be of type Integer (rejected value: abc)","field":"ownerId","defaultMessage":"must be of type Integer","rejectedValue":"abc"}]}

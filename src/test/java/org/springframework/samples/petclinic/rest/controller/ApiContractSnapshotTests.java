@@ -28,6 +28,7 @@ import tools.jackson.databind.node.ArrayNode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 /**
@@ -116,6 +117,10 @@ class ApiContractSnapshotTests {
         assertSnapshot("get-v2-owners-size-0", get("/api/v2/owners?size=0"));
         assertSnapshot("get-v2-owners-size-101", get("/api/v2/owners?size=101"));
         assertSnapshot("get-v2-pets-page-negative", get("/api/v2/pets?page=-1"));
+        assertSnapshot("get-owner-id-not-a-number", get("/api/owners/abc"));
+        assertSnapshot("post-owner-malformed-json", json(post("/api/owners"), "{\"firstName\":"));
+        assertSnapshot("get-unknown-path", get("/api/unknown"));
+        assertSnapshot("patch-owners-not-allowed", patch("/api/owners"));
     }
 
     @Test

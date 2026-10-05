@@ -1,3 +1,3 @@
-status: 500
+status: 400
 location: null
-body: {"detail":"An unexpected error occurred while processing your request","instance":"/api/v2/pets","status":500,"title":"ConstraintViolationException","type":"http://localhost/api/v2/pets","timestamp":"<timestamp>","schemaValidationErrors":[]}
+body: {"detail":"The request contains invalid or missing parameters","instance":"/api/v2/pets","status":400,"title":"ConstraintViolationException","type":"http://localhost/api/v2/pets","timestamp":"<timestamp>","schemaValidationErrors":[{"message":"Field 'page' must be greater than or equal to 0 (rejected value: -1)","field":"page","defaultMessage":"must be greater than or equal to 0","rejectedValue":"-1"}]}

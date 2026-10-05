@@ -1,0 +1,3 @@
+status: 404
+location: null
+body: {"detail":"The requested resource was not found","instance":"/api/unknown","status":404,"title":"NoResourceFoundException","type":"http://localhost/api/unknown","timestamp":"<timestamp>","schemaValidationErrors":[]}
