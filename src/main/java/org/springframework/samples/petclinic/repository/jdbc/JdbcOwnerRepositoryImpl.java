@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,7 +31,6 @@ import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
@@ -101,15 +101,14 @@ public class JdbcOwnerRepositoryImpl implements OwnerRepository {
      * Loads the {@link Owner} with the given id, together with its {@link Pet Pets} and {@link Visit Visits}.
      */
     @Override
-    public Owner findById(int id) {
-        Owner owner = jdbcTemplate.query(
+    public Optional<Owner> findById(int id) {
+        Optional<Owner> owner = jdbcTemplate.query(
                 "SELECT id, first_name, last_name, address, city, telephone FROM owners WHERE id = ?",
                 ownerRowMapper,
                 id)
             .stream()
-            .findFirst()
-            .orElseThrow(() -> new ObjectRetrievalFailureException(Owner.class, id));
-        loadPetsAndVisits(owner);
+            .findFirst();
+        owner.ifPresent(this::loadPetsAndVisits);
         return owner;
     }
 

@@ -18,12 +18,10 @@ package org.springframework.samples.petclinic.util;
 
 import java.util.Collection;
 
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
 /**
- * Utility methods for handling entities. Separate from the BaseEntity class mainly because of dependency on the
- * ORM-associated ObjectRetrievalFailureException.
+ * Test helper for picking an entity with a given id out of a collection.
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -39,16 +37,15 @@ public abstract class EntityUtils {
      * @param entityClass the entity class to look up
      * @param entityId    the entity id to look up
      * @return the found entity
-     * @throws ObjectRetrievalFailureException if the entity was not found
+     * @throws IllegalArgumentException if the entity was not found
      */
-    public static <T extends BaseEntity> T getById(Collection<T> entities, Class<T> entityClass, int entityId)
-        throws ObjectRetrievalFailureException {
+    public static <T extends BaseEntity> T getById(Collection<T> entities, Class<T> entityClass, int entityId) {
         for (T entity : entities) {
             if (entity.getId() == entityId && entityClass.isInstance(entity)) {
                 return entity;
             }
         }
-        throw new ObjectRetrievalFailureException(entityClass, entityId);
+        throw new IllegalArgumentException(entityClass.getSimpleName() + " with id " + entityId + " not found");
     }
 
 }

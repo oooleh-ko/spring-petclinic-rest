@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -51,10 +52,9 @@ public interface OwnerRepository {
      * Retrieve an <code>Owner</code> from the data store by id.
      *
      * @param id the id to search for
-     * @return the <code>Owner</code> if found
-     * @throws org.springframework.dao.DataRetrievalFailureException if not found
+     * @return the <code>Owner</code>, or an empty <code>Optional</code> if there is none with this id
      */
-    Owner findById(int id) throws DataAccessException;
+    Optional<Owner> findById(int id) throws DataAccessException;
 
 
     /**

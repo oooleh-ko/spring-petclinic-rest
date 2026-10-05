@@ -18,12 +18,12 @@ package org.springframework.samples.petclinic.repository.jdbc;
 
 import java.sql.PreparedStatement;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.repository.PetTypeRepository;
 import org.springframework.stereotype.Repository;
@@ -50,11 +50,10 @@ public class JdbcPetTypeRepositoryImpl implements PetTypeRepository {
     }
 
     @Override
-    public PetType findById(int id) {
+    public Optional<PetType> findById(int id) {
         return jdbcTemplate.query("SELECT id, name FROM types WHERE id = ?", petTypeRowMapper, id)
             .stream()
-            .findFirst()
-            .orElseThrow(() -> new ObjectRetrievalFailureException(PetType.class, id));
+            .findFirst();
     }
 
     @Override

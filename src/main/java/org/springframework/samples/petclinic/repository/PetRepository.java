@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -48,10 +49,9 @@ public interface PetRepository {
      * Retrieve a <code>Pet</code> from the data store by id.
      *
      * @param id the id to search for
-     * @return the <code>Pet</code> if found
-     * @throws org.springframework.dao.DataRetrievalFailureException if not found
+     * @return the <code>Pet</code>, or an empty <code>Optional</code> if there is none with this id
      */
-    Pet findById(int id) throws DataAccessException;
+    Optional<Pet> findById(int id) throws DataAccessException;
 
     /**
      * Save a <code>Pet</code> to the data store, either inserting or updating it.
