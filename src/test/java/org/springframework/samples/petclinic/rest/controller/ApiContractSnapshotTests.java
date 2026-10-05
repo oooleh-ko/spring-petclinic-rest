@@ -97,6 +97,9 @@ class ApiContractSnapshotTests {
         assertSnapshot("post-specialty", json(post("/api/specialties"), "{\"name\":\"cardiology\"}"));
         assertSnapshot("post-vet", json(post("/api/vets"),
             "{\"firstName\":\"Anna\",\"lastName\":\"Koval\",\"specialties\":[{\"id\":1,\"name\":\"radiology\"}]}"));
+
+        assertSnapshot("post-user", json(post("/api/users"),
+            "{\"username\":\"student\",\"password\":\"secret\",\"enabled\":true,\"roles\":[{\"name\":\"OWNER_ADMIN\"}]}"));
     }
 
     @Test
