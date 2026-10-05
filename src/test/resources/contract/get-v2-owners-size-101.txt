@@ -1,0 +1,3 @@
+status: 400
+location: null
+body: {"detail":"The request contains invalid or missing parameters","instance":"/api/v2/owners","status":400,"title":"ConstraintViolationException","type":"http://localhost/api/v2/owners","timestamp":"<timestamp>","schemaValidationErrors":[{"message":"Field 'size' must be less than or equal to 100 (rejected value: 101)","field":"size","defaultMessage":"must be less than or equal to 100","rejectedValue":"101"}]}

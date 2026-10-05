@@ -1,0 +1,3 @@
+status: 201
+location: null
+body: {"username":"student","enabled":true,"password":"secret","roles":[{"name":"ROLE_OWNER_ADMIN"}]}

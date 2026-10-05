@@ -20,9 +20,7 @@
     <properties>
 
         <!-- Third-party libraries -->
-        <spring-data-jdbc.version>1.2.1.RELEASE</spring-data-jdbc.version>
         <springdoc-openapi-ui.version>3.1.1</springdoc-openapi-ui.version>
-        <jackson-databind-nullable.version>0.2.11</jackson-databind-nullable.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
 
@@ -32,7 +30,6 @@
         <maven.jacoco-plugin.version>0.8.15</maven.jacoco-plugin.version>
         <maven.jxr-plugin.version>3.6.0</maven.jxr-plugin.version>
         <maven.license-plugin.version>2.7.1</maven.license-plugin.version>
-        <maven.openapi-generator-plugin.version>7.25.0</maven.openapi-generator-plugin.version>
         <maven.project-info-reports-plugin.version>3.9.0</maven.project-info-reports-plugin.version>
         <maven.rat-plugin.version>0.18</maven.rat-plugin.version>
         <maven.refactor-first-plugin.version>0.10.0</maven.refactor-first-plugin.version>
@@ -102,30 +99,9 @@
             <artifactId>spring-boot-h2console</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jdbc-core</artifactId>
-            <version>${spring-data-jdbc.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- Test libs -->
@@ -163,11 +139,6 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc-openapi-ui.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openapitools</groupId>
-            <artifactId>jackson-databind-nullable</artifactId>
-            <version>${jackson-databind-nullable.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -348,68 +319,6 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <!-- RELEASE_VERSION -->
-                <version>${maven.openapi-generator-plugin.version}</version>
-                <!-- /RELEASE_VERSION -->
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/openapi.yml</inputSpec>
-                            <generatorName>spring</generatorName>
-                            <library>spring-boot</library>
-
-                            <!-- Only enabling model andopenapi-generator-maven-plugin API generation -->
-                            <modelNameSuffix>Dto</modelNameSuffix>
-                            <apiPackage>org.springframework.samples.petclinic.rest.api</apiPackage>
-                            <generateModels>true</generateModels>
-                            <modelPackage>org.springframework.samples.petclinic.rest.dto</modelPackage>
-                            <generateApis>true</generateApis>
-                            <importMappings>
-                                <importMapping>Nullable=org.jspecify.annotations.Nullable</importMapping>
-                            </importMappings>
-                            <configOptions>
-                                <!-- RestController implementation is provided by Petclinic developers -->
-                                <interfaceOnly>true</interfaceOnly>
-                                <!-- Generate API interfaces from OpenAPI tags -->
-                                <useTags>true</useTags>
-                                <!-- Activating Java 8 features -->
-                                <performBeanValidation>true</performBeanValidation>
-                                <useSpringBoot3>true</useSpringBoot3>
-                                <useJakartaEe>true</useJakartaEe>
-                                <openApiNullable>false</openApiNullable>
-                                <!-- override the default library to jersey2 -->
-                                <serializationLibrary>jackson</serializationLibrary>
-                                <!-- switch documentation provider to springdoc -->
-                                <documentationProvider>springdoc</documentationProvider>
-                            </configOptions>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>target/generated-sources/openapi/src/main/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

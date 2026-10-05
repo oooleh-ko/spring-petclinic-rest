@@ -1,0 +1,3 @@
+status: 201
+location: /api/specialties/<id>
+body: {"id":<id>,"name":"cardiology"}

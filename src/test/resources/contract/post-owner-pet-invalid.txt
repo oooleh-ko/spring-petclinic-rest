@@ -1,0 +1,3 @@
+status: 400
+location: null
+body: {"detail":"The request contains invalid or missing parameters","instance":"/api/owners/1/pets","status":400,"title":"MethodArgumentNotValidException","type":"http://localhost/api/owners/1/pets","timestamp":"<timestamp>","schemaValidationErrors":[{"message":"Field 'type.id' must not be null (rejected value: null)","field":"type.id","defaultMessage":"must not be null","rejectedValue":"null"},{"message":"Field 'type.name' size must be between 1 and 80 (rejected value: )","field":"type.name","defaultMessage":"size must be between 1 and 80","rejectedValue":""}]}

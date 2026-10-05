@@ -1,0 +1,3 @@
+status: 400
+location: null
+body: {"detail":"The request body is missing or is not valid JSON","instance":"/api/owners","status":400,"title":"HttpMessageNotReadableException","type":"http://localhost/api/owners","timestamp":"<timestamp>","schemaValidationErrors":[]}

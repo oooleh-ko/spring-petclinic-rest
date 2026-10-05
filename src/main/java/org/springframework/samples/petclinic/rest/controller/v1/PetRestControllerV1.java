@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.mapper.PetMapper;
 import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.rest.api.PetsApi;
 import org.springframework.samples.petclinic.rest.dto.PetDto;
 import org.springframework.samples.petclinic.service.ClinicService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +29,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author Vitaliy Fedoriv
@@ -37,8 +46,10 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(exposedHeaders = "errors, content-type")
-@RequestMapping("api")
-public class PetRestControllerV1 implements PetsApi {
+@Validated
+@Tag(name = "pets", description = "Endpoints related to pets.")
+@RequestMapping("/api")
+public class PetRestControllerV1 {
 
     private final ClinicService clinicService;
 
@@ -49,9 +60,10 @@ public class PetRestControllerV1 implements PetsApi {
         this.petMapper = petMapper;
     }
 
+    @GetMapping(value = "/pets/{petId}", produces = "application/json")
+    @Operation(summary = "Get a pet by ID")
     @PreAuthorize("hasRole(@roles.OWNER_ADMIN)")
-    @Override
-    public ResponseEntity<PetDto> getPet(Integer petId) {
+    public ResponseEntity<PetDto> getPet(@PathVariable("petId") @Min(0) Integer petId) {
         PetDto pet = petMapper.toPetDto(this.clinicService.findPetById(petId));
         if (pet == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -59,8 +71,9 @@ public class PetRestControllerV1 implements PetsApi {
         return new ResponseEntity<>(pet, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/pets", produces = "application/json")
+    @Operation(summary = "Lists pet")
     @PreAuthorize("hasRole(@roles.OWNER_ADMIN)")
-    @Override
     public ResponseEntity<List<PetDto>> listPets() {
         List<PetDto> pets = new ArrayList<>(petMapper.toPetsDto(this.clinicService.findAllPets()));
         if (pets.isEmpty()) {
@@ -70,9 +83,12 @@ public class PetRestControllerV1 implements PetsApi {
     }
 
 
+    @PutMapping(value = "/pets/{petId}", produces = "application/json", consumes = "application/json")
+    @Operation(summary = "Update a pet by ID")
     @PreAuthorize("hasRole(@roles.OWNER_ADMIN)")
-    @Override
-    public ResponseEntity<PetDto> updatePet(Integer petId, PetDto petDto) {
+    public ResponseEntity<PetDto> updatePet(
+        @PathVariable("petId") @Min(0) Integer petId,
+        @Valid @RequestBody PetDto petDto) {
         Pet currentPet = this.clinicService.findPetById(petId);
         if (currentPet == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -84,9 +100,10 @@ public class PetRestControllerV1 implements PetsApi {
         return new ResponseEntity<>(petMapper.toPetDto(currentPet), HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping(value = "/pets/{petId}", produces = "application/json")
+    @Operation(summary = "Delete a pet by ID")
     @PreAuthorize("hasRole(@roles.OWNER_ADMIN)")
-    @Override
-    public ResponseEntity<PetDto> deletePet(Integer petId) {
+    public ResponseEntity<PetDto> deletePet(@PathVariable("petId") @Min(0) Integer petId) {
         Pet pet = this.clinicService.findPetById(petId);
         if (pet == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
