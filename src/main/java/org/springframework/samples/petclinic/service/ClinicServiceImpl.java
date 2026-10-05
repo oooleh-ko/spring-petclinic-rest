@@ -16,10 +16,8 @@
 package org.springframework.samples.petclinic.service;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.*;
 import org.springframework.samples.petclinic.repository.*;
 import org.springframework.stereotype.Service;
@@ -28,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 
 /**
  * Mostly used as a facade for all Petclinic controllers
@@ -83,7 +80,7 @@ public class ClinicServiceImpl implements ClinicService {
     @Override
     @Transactional(readOnly = true)
     public Visit findVisitById(int visitId) throws DataAccessException {
-        return findEntityById(() -> visitRepository.findById(visitId));
+        return visitRepository.findById(visitId).orElse(null);
     }
 
     @Override
@@ -101,7 +98,7 @@ public class ClinicServiceImpl implements ClinicService {
     @Override
     @Transactional(readOnly = true)
     public Vet findVetById(int id) throws DataAccessException {
-        return findEntityById(() -> vetRepository.findById(id));
+        return vetRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -146,7 +143,7 @@ public class ClinicServiceImpl implements ClinicService {
     @Override
     @Transactional(readOnly = true)
     public PetType findPetTypeById(int petTypeId) {
-        return findEntityById(() -> petTypeRepository.findById(petTypeId));
+        return petTypeRepository.findById(petTypeId).orElse(null);
     }
 
     @Override
@@ -170,7 +167,7 @@ public class ClinicServiceImpl implements ClinicService {
     @Override
     @Transactional(readOnly = true)
     public Specialty findSpecialtyById(int specialtyId) {
-        return findEntityById(() -> specialtyRepository.findById(specialtyId));
+        return specialtyRepository.findById(specialtyId).orElse(null);
     }
 
     @Override
@@ -200,13 +197,13 @@ public class ClinicServiceImpl implements ClinicService {
     @Override
     @Transactional(readOnly = true)
     public Owner findOwnerById(int id) throws DataAccessException {
-        return findEntityById(() -> ownerRepository.findById(id));
+        return ownerRepository.findById(id).orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Pet findPetById(int id) throws DataAccessException {
-        return findEntityById(() -> petRepository.findById(id));
+        return petRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -251,16 +248,7 @@ public class ClinicServiceImpl implements ClinicService {
     @Override
     @Transactional(readOnly = true)
     public List<Specialty> findSpecialtiesByNameIn(Set<String> names) {
-        return findEntityById(() -> specialtyRepository.findSpecialtiesByNameIn(names));
-    }
-
-    private <T> T findEntityById(Supplier<T> supplier) {
-        try {
-            return supplier.get();
-        } catch (ObjectRetrievalFailureException | EmptyResultDataAccessException e) {
-            // Just ignore not found exceptions
-            return null;
-        }
+        return specialtyRepository.findSpecialtiesByNameIn(names);
     }
 
 }

@@ -18,13 +18,12 @@ package org.springframework.samples.petclinic.repository.jdbc;
 import java.sql.PreparedStatement;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.repository.VetRepository;
@@ -42,7 +41,6 @@ import org.springframework.stereotype.Repository;
  * @author Michael Isvy
  * @author Vitaliy Fedoriv
  */
-@DependsOnDatabaseInitialization
 @Repository
 public class JdbcVetRepositoryImpl implements VetRepository {
 
@@ -78,12 +76,11 @@ public class JdbcVetRepositoryImpl implements VetRepository {
     }
 
     @Override
-    public Vet findById(int id) {
-        Vet vet = jdbcTemplate.query("SELECT id, first_name, last_name FROM vets WHERE id = ?", vetRowMapper, id)
+    public Optional<Vet> findById(int id) {
+        Optional<Vet> vet = jdbcTemplate.query("SELECT id, first_name, last_name FROM vets WHERE id = ?", vetRowMapper, id)
             .stream()
-            .findFirst()
-            .orElseThrow(() -> new ObjectRetrievalFailureException(Vet.class, id));
-        loadSpecialties(vet);
+            .findFirst();
+        vet.ifPresent(this::loadSpecialties);
         return vet;
     }
 

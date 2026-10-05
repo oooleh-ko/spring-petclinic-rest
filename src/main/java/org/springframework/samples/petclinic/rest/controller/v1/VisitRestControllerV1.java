@@ -16,6 +16,14 @@
 
 package org.springframework.samples.petclinic.rest.controller.v1;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +33,9 @@ import org.springframework.samples.petclinic.rest.dto.VisitDto;
 import org.springframework.samples.petclinic.rest.dto.VisitFieldsDto;
 import org.springframework.samples.petclinic.service.ClinicService;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * @author Vitaliy Fedoriv
@@ -111,7 +111,6 @@ public class VisitRestControllerV1 {
     @DeleteMapping(value = "/visits/{visitId}", produces = "application/json")
     @Operation(summary = "Delete a visit by ID")
     @PreAuthorize("hasRole(@roles.OWNER_ADMIN)")
-    @Transactional
     public ResponseEntity<VisitDto> deleteVisit(@PathVariable("visitId") @Min(0) Integer visitId) {
         Visit visit = this.clinicService.findVisitById(visitId);
         if (visit == null) {

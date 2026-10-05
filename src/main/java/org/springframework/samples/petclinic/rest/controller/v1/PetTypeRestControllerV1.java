@@ -16,6 +16,14 @@
 
 package org.springframework.samples.petclinic.rest.controller.v1;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,18 +33,9 @@ import org.springframework.samples.petclinic.rest.dto.PetTypeDto;
 import org.springframework.samples.petclinic.rest.dto.PetTypeFieldsDto;
 import org.springframework.samples.petclinic.service.ClinicService;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import org.springframework.validation.annotation.Validated;
 
 @RestController
 @CrossOrigin(exposedHeaders = "errors, content-type")
@@ -105,7 +104,6 @@ public class PetTypeRestControllerV1 {
     @DeleteMapping(value = "/pettypes/{petTypeId}", produces = "application/json")
     @Operation(summary = "Delete a pet type by ID")
     @PreAuthorize("hasRole(@roles.VET_ADMIN)")
-    @Transactional
     public ResponseEntity<PetTypeDto> deletePetType(@PathVariable("petTypeId") @Min(0) Integer petTypeId) {
         PetType petType = this.clinicService.findPetTypeById(petTypeId);
         if (petType == null) {

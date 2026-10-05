@@ -19,13 +19,12 @@ import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
@@ -45,7 +44,6 @@ import org.springframework.stereotype.Repository;
  * @author Michael Isvy
  * @author Vitaliy Fedoriv
  */
-@DependsOnDatabaseInitialization
 @Repository
 public class JdbcVisitRepositoryImpl implements VisitRepository {
 
@@ -102,11 +100,10 @@ public class JdbcVisitRepositoryImpl implements VisitRepository {
     }
 
     @Override
-    public Visit findById(int id) {
+    public Optional<Visit> findById(int id) {
         return jdbcTemplate.query(SELECT_VISITS + "WHERE v.id = ?", visitRowMapper, id)
             .stream()
-            .findFirst()
-            .orElseThrow(() -> new ObjectRetrievalFailureException(Visit.class, id));
+            .findFirst();
     }
 
     @Override

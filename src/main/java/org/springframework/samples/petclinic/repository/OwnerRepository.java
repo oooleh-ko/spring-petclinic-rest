@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -51,10 +52,9 @@ public interface OwnerRepository {
      * Retrieve an <code>Owner</code> from the data store by id.
      *
      * @param id the id to search for
-     * @return the <code>Owner</code> if found
-     * @throws org.springframework.dao.DataRetrievalFailureException if not found
+     * @return the <code>Owner</code>, or an empty <code>Optional</code> if there is none with this id
      */
-    Owner findById(int id) throws DataAccessException;
+    Optional<Owner> findById(int id) throws DataAccessException;
 
 
     /**
@@ -71,17 +71,17 @@ public interface OwnerRepository {
      * @return a <code>Collection</code> of <code>Owner</code>s (or an empty <code>Collection</code> if none
      * found)
      */
-	Collection<Owner> findAll() throws DataAccessException;
+    Collection<Owner> findAll() throws DataAccessException;
 
     Page<Owner> findAll(Pageable pageable) throws DataAccessException;
-	
+    
     /**
      * Delete an <code>Owner</code> to the data store by <code>Owner</code>.
      *
      * @param owner the <code>Owner</code> to delete
      * 
      */
-	void delete(Owner owner) throws DataAccessException;
+    void delete(Owner owner) throws DataAccessException;
 
 
 }

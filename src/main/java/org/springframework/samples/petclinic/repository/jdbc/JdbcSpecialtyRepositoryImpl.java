@@ -20,14 +20,13 @@ import java.sql.PreparedStatement;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
-import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.repository.SpecialtyRepository;
 import org.springframework.stereotype.Repository;
@@ -37,7 +36,6 @@ import org.springframework.stereotype.Repository;
  *
  */
 
-@DependsOnDatabaseInitialization
 @Repository
 public class JdbcSpecialtyRepositoryImpl implements SpecialtyRepository {
 
@@ -55,11 +53,10 @@ public class JdbcSpecialtyRepositoryImpl implements SpecialtyRepository {
     }
 
     @Override
-    public Specialty findById(int id) {
+    public Optional<Specialty> findById(int id) {
         return jdbcTemplate.query("SELECT id, name FROM specialties WHERE id = ?", specialtyRowMapper, id)
             .stream()
-            .findFirst()
-            .orElseThrow(() -> new ObjectRetrievalFailureException(Specialty.class, id));
+            .findFirst();
     }
 
     @Override

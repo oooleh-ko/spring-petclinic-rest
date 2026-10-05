@@ -19,8 +19,8 @@ import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -28,13 +28,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.samples.petclinic.repository.PetRepository;
-import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -46,7 +44,6 @@ import org.springframework.stereotype.Repository;
  * @author Mark Fisher
  * @author Vitaliy Fedoriv
  */
-@DependsOnDatabaseInitialization
 @Repository
 public class JdbcPetRepositoryImpl implements PetRepository {
 
@@ -109,14 +106,14 @@ public class JdbcPetRepositoryImpl implements PetRepository {
      * and an owner that has all of its pets.
      */
     @Override
-    public Pet findById(int id) {
-        Integer ownerId = jdbcTemplate.query("SELECT owner_id FROM pets WHERE id = ?",
+    public Optional<Pet> findById(int id) {
+        Optional<Integer> ownerId = jdbcTemplate.query("SELECT owner_id FROM pets WHERE id = ?",
                 (rs, rowNum) -> rs.getInt("owner_id"), id)
             .stream()
-            .findFirst()
-            .orElseThrow(() -> new ObjectRetrievalFailureException(Pet.class, id));
-        Owner owner = ownerRepository.findById(ownerId);
-        return EntityUtils.getById(owner.getPets(), Pet.class, id);
+            .findFirst();
+        return ownerId
+            .flatMap(ownerRepository::findById)
+            .map(owner -> owner.getPet(id));
     }
 
     @Override

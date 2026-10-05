@@ -1,13 +1,11 @@
 package org.springframework.samples.petclinic.repository.jdbc;
 
-import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.stereotype.Repository;
 
-@DependsOnDatabaseInitialization
 @Repository
 public class JdbcUserRepositoryImpl implements UserRepository {
 
