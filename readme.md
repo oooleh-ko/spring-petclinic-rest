@@ -158,35 +158,22 @@ docker-compose --profile mysql up
 ### **Further Documentation**
 - [MySQL](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources/db/mysql/petclinic_db_setup_mysql.txt)
 
-## API First Approach
+## Code-first REST API
 
-This API is built following some [API First approach principles](https://swagger.io/resources/articles/adopting-an-api-first-approach/).
+Endpoints are declared directly in the controllers (`rest/controller/v1`, `rest/controller/v2`)
+with `@GetMapping`, `@PostMapping`, `@PutMapping` and `@DeleteMapping`. Request and response
+bodies are plain DTO classes in `rest/dto`, validated with Bean Validation annotations
+(`@NotNull`, `@Size`, `@Pattern`, ...).
 
-It is specified through the [OpenAPI](https://oai.github.io/Documentation/).
-It is specified in this [file](./src/main/resources/openapi.yml).
-
-Some of the required classes are generated during the build time. 
-Here are the generated file types:
-* DTOs
-* API template interfaces specifying methods to override in the controllers
-
-To see how to get them generated you can read the next chapter. 
+The OpenAPI description is generated from this code by [springdoc](https://springdoc.org/)
+and served at `/v3/api-docs`; Swagger UI shows it in the browser (see above).
 
 ## Generated code
 
-Some of the required classes are generated during the build time using maven or any IDE (e.g., IntelliJ Idea or Eclipse).
+The mappers between entities and DTOs in `org.springframework.samples.petclinic.mapper` are
+generated at build time by [MapStruct](https://mapstruct.org/) into the ``target/generated-sources`` folder.
 
-All of these classes are generated into the ``target/generated-sources`` folder.
-
-Here is a list of the generated packages and the corresponding tooling:
-
-| Package name                                   | Tool             |
-|------------------------------------------------|------------------|
-| org.springframework.samples.petclinic.mapper   | [MapStruct](https://mapstruct.org/)        |
-| org.springframework.samples.petclinic.rest.dto | [OpenAPI Generator maven plugin](https://github.com/OpenAPITools/openapi-generator/) |
-
-
-To get both, you have to run the following command:
+To generate them, run:
 
 ```jshelllanguage
 mvn clean install
