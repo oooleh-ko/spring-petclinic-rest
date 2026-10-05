@@ -71,17 +71,17 @@ public interface OwnerRepository {
      * @return a <code>Collection</code> of <code>Owner</code>s (or an empty <code>Collection</code> if none
      * found)
      */
-	Collection<Owner> findAll() throws DataAccessException;
+    Collection<Owner> findAll() throws DataAccessException;
 
     Page<Owner> findAll(Pageable pageable) throws DataAccessException;
-	
+    
     /**
      * Delete an <code>Owner</code> to the data store by <code>Owner</code>.
      *
      * @param owner the <code>Owner</code> to delete
      * 
      */
-	void delete(Owner owner) throws DataAccessException;
+    void delete(Owner owner) throws DataAccessException;
 
 
 }

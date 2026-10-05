@@ -67,7 +67,7 @@ public interface PetRepository {
      * @return a <code>Collection</code> of <code>Pet</code>s (or an empty <code>Collection</code> if none
      * found)
      */
-	Collection<Pet> findAll() throws DataAccessException;
+    Collection<Pet> findAll() throws DataAccessException;
 
     Page<Pet> findAll(Pageable pageable) throws DataAccessException;
 
@@ -77,6 +77,6 @@ public interface PetRepository {
      * @param pet the <code>Pet</code> to delete
      *
      */
-	void delete(Pet pet) throws DataAccessException;
+    void delete(Pet pet) throws DataAccessException;
 
 }
