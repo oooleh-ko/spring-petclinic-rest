@@ -21,18 +21,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.mapper.UserMapper;
 import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.rest.api.UsersApi;
 import org.springframework.samples.petclinic.rest.dto.UserDto;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @CrossOrigin(exposedHeaders = "errors, content-type")
-@RequestMapping("api")
-public class UserRestControllerV1 implements UsersApi {
+@Validated
+@Tag(name = "users", description = "Endpoints related to users.")
+@RequestMapping("/api")
+public class UserRestControllerV1 {
 
     private final UserService userService;
     private final UserMapper userMapper;
@@ -43,9 +50,10 @@ public class UserRestControllerV1 implements UsersApi {
     }
 
 
+    @PostMapping(value = "/users", produces = "application/json", consumes = "application/json")
+    @Operation(summary = "Create a user")
     @PreAuthorize( "hasRole(@roles.ADMIN)" )
-    @Override
-    public ResponseEntity<UserDto> addUser(UserDto userDto) {
+    public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserDto userDto) {
         HttpHeaders headers = new HttpHeaders();
         User user = userMapper.toUser(userDto);
         this.userService.saveUser(user);

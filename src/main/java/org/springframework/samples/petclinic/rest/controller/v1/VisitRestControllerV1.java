@@ -21,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.mapper.VisitMapper;
 import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.rest.api.VisitsApi;
 import org.springframework.samples.petclinic.rest.dto.VisitDto;
 import org.springframework.samples.petclinic.rest.dto.VisitFieldsDto;
 import org.springframework.samples.petclinic.service.ClinicService;
@@ -32,6 +31,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * @author Vitaliy Fedoriv
@@ -39,8 +43,10 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(exposedHeaders = "errors, content-type")
-@RequestMapping("api")
-public class VisitRestControllerV1 implements VisitsApi {
+@Validated
+@Tag(name = "visits", description = "Endpoints related to vet visits.")
+@RequestMapping("/api")
+public class VisitRestControllerV1 {
 
     private final ClinicService clinicService;
 
@@ -52,8 +58,9 @@ public class VisitRestControllerV1 implements VisitsApi {
     }
 
 
+    @GetMapping(value = "/visits", produces = "application/json")
+    @Operation(summary = "Lists visits")
     @PreAuthorize("hasRole(@roles.OWNER_ADMIN)")
-    @Override
     public ResponseEntity<List<VisitDto>> listVisits() {
         List<Visit> visits = new ArrayList<>(this.clinicService.findAllVisits());
         if (visits.isEmpty()) {
@@ -62,9 +69,10 @@ public class VisitRestControllerV1 implements VisitsApi {
         return new ResponseEntity<>(new ArrayList<>(visitMapper.toVisitsDto(visits)), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/visits/{visitId}", produces = "application/json")
+    @Operation(summary = "Get a visit by ID")
     @PreAuthorize("hasRole(@roles.OWNER_ADMIN)")
-    @Override
-    public ResponseEntity<VisitDto> getVisit( Integer visitId) {
+    public ResponseEntity<VisitDto> getVisit(@PathVariable("visitId") @Min(0) Integer visitId) {
         Visit visit = this.clinicService.findVisitById(visitId);
         if (visit == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -72,9 +80,10 @@ public class VisitRestControllerV1 implements VisitsApi {
         return new ResponseEntity<>(visitMapper.toVisitDto(visit), HttpStatus.OK);
     }
 
+    @PostMapping(value = "/visits", produces = "application/json", consumes = "application/json")
+    @Operation(summary = "Create a visit")
     @PreAuthorize("hasRole(@roles.OWNER_ADMIN)")
-    @Override
-    public ResponseEntity<VisitDto> addVisit(VisitDto visitDto) {
+    public ResponseEntity<VisitDto> addVisit(@Valid @RequestBody VisitDto visitDto) {
         HttpHeaders headers = new HttpHeaders();
         Visit visit = visitMapper.toVisit(visitDto);
         this.clinicService.saveVisit(visit);
@@ -83,9 +92,12 @@ public class VisitRestControllerV1 implements VisitsApi {
         return new ResponseEntity<>(visitDto, headers, HttpStatus.CREATED);
     }
 
+    @PutMapping(value = "/visits/{visitId}", produces = "application/json", consumes = "application/json")
+    @Operation(summary = "Update a visit by ID")
     @PreAuthorize("hasRole(@roles.OWNER_ADMIN)")
-    @Override
-    public ResponseEntity<VisitDto> updateVisit(Integer visitId, VisitFieldsDto visitDto) {
+    public ResponseEntity<VisitDto> updateVisit(
+        @PathVariable("visitId") @Min(0) Integer visitId,
+        @Valid @RequestBody VisitFieldsDto visitDto) {
         Visit currentVisit = this.clinicService.findVisitById(visitId);
         if (currentVisit == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -96,10 +108,11 @@ public class VisitRestControllerV1 implements VisitsApi {
         return new ResponseEntity<>(visitMapper.toVisitDto(currentVisit), HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping(value = "/visits/{visitId}", produces = "application/json")
+    @Operation(summary = "Delete a visit by ID")
     @PreAuthorize("hasRole(@roles.OWNER_ADMIN)")
     @Transactional
-    @Override
-    public ResponseEntity<VisitDto> deleteVisit(Integer visitId) {
+    public ResponseEntity<VisitDto> deleteVisit(@PathVariable("visitId") @Min(0) Integer visitId) {
         Visit visit = this.clinicService.findVisitById(visitId);
         if (visit == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
